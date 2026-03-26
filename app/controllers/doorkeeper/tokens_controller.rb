@@ -87,10 +87,6 @@ module Doorkeeper
     # credentials, in the case of a confidential client. The token being
     # revoked must also belong to the requesting client.
     #
-    # Once a confidential client is authenticated, it must be authorized to
-    # revoke the provided access or refresh token. This ensures one client
-    # cannot revoke another's tokens.
-    #
     # Doorkeeper determines the client type implicitly via the presence of the
     # OAuth client associated with a given access or refresh token. Since public
     # clients authenticate the resource owner via "password" or "implicit" grant
@@ -102,7 +98,7 @@ module Doorkeeper
     def authorized?
       # Token belongs to specific client, so we need to check if
       # authenticated client could access it.
-      if token.application_id? && token.application.confidential?
+      if token.application_id?
         # We authorize client by checking token's application
         server.client && server.client.application == token.application
       else
